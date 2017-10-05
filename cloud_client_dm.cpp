@@ -1,26 +1,29 @@
-//----------------------------------------------------------------------------
-// The confidential and proprietary information contained in this file may
-// only be used by a person authorised under and to the extent permitted
-// by a subsisting licensing agreement from ARM Limited or its affiliates.
-//
-// (C) COPYRIGHT 2016 ARM Limited or its affiliates.
-// ALL RIGHTS RESERVED
-//
-// This entire notice must be reproduced on all copies of this file
-// and copies of this file may only be made by a person if such person is
-// permitted to do so under the terms of a subsisting license agreement
-// from ARM Limited or its affiliates.
-//----------------------------------------------------------------------------
+/* mbed Microcontroller Library
+ * Copyright (c) 2017 u-blox
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "mbed.h"
-#include "mbed-cloud-client/MbedCloudClient.h"
+#include "MbedCloudClient.h"
 #include "CloudClientStorage.h"
 #include "cloud_client_dm.h"
-#define printfLog(format, ...) debug_if(_debugOn, format, ## __VA_ARGS__)
 
 #ifdef MBED_CLOUD_CLIENT_SUPPORT_UPDATE
 #include "update_ui_example.h"
 #endif
+
+#define printfLog(format, ...) debug_if(_debugOn, format, ## __VA_ARGS__)
 
 /**********************************************************************
  * STATIC VARIABLES
@@ -466,10 +469,12 @@ CloudClientDm::~CloudClientDm()
 }
 
 // Initialise LWM2M and its objects.
-bool CloudClientDm::start()
+bool CloudClientDm::start(M2MObjectList *objectList)
 {
     _started = true;
-    _cloudClient.add_objects(_objList);
+    if (objectList != NULL) {
+        _cloudClient.add_objects(*objectList);
+    }
     _cloudClient.on_registered(this, &CloudClientDm::clientRegisteredCallback);
     _cloudClient.on_unregistered(this, &CloudClientDm::clientDeregisteredCallback);
     _cloudClient.on_error(this, &CloudClientDm::errorCallback);
@@ -525,7 +530,7 @@ bool CloudClientDm::connect(void *interface)
 }
 
 // Keep a UDP link up
-void CloudClientDm::keep_alive()
+void CloudClientDm::keepAlive()
 {
     _cloudClient.keep_alive();
 }

@@ -1,29 +1,29 @@
-//----------------------------------------------------------------------------
-// The confidential and proprietary information contained in this file may
-// only be used by a person authorised under and to the extent permitted
-// by a subsisting licensing agreement from ARM Limited or its affiliates.
-//
-// (C) COPYRIGHT 2016 ARM Limited or its affiliates.
-// ALL RIGHTS RESERVED
-//
-// This entire notice must be reproduced on all copies of this file
-// and copies of this file may only be made by a person if such person is
-// permitted to do so under the terms of a subsisting license agreement
-// from ARM Limited or its affiliates.
-//----------------------------------------------------------------------------
+/* mbed Microcontroller Library
+ * Copyright (c) 2017 u-blox
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #ifndef _CLOUD_CLIENT_DM_
 #define _CLOUD_CLIENT_DM_
 
 #include "mbed.h"
-#include "mbed-trace/mbed_trace.h"
-#include "mbed-trace-helper.h"
-#include "mbed-cloud-client/MbedCloudClient.h"
+#include "MbedCloudClient.h"
 
 /* This class provides a friendly API to the Mbed Cloud Client and its
  * Device Management functionality.
  *
- * Please see refer to http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html
+ * Please refer to http://www.openmobilealliance.org/wp/OMNA/LwM2M/LwM2MRegistry.html
  * and particularly objects urn:oma:lwm2m:oma:3 and urn:oma:lwm2m:oma:5
  * for a description of the objects and resources involved.
  *
@@ -31,12 +31,12 @@
  *
  * 1.  Instantiate CloudClientDm, with debug either on or off.
  * 2.  Configure CloudClientDm by calling the "set" or "add" methods
- *     for the Device objects you would like to include.  Note that
- *     some objects may be added by Mbed Cloud Client itself but
+ *     for the Device object resources you would like to include.  Note
+ *     that some resources may be added by Mbed Cloud Client itself but
  *     there is no harm in you adding them, they will not be
  *     duplicated and your value will overwrite the previous value.
- * 3.  Start CloudClientDm; this creates the Device object
- *     according to your configuration.
+ * 3.  Start CloudClientDm; this creates the Device object and its
+ *     resources according to your configuration.
  * 4.  Register CloudClientDm with a LWM2M server and use it.
  * 5.  When finished, stop CloudClientDm.
  * 6.  Delete CloudClientDm.
@@ -48,9 +48,8 @@
  *        Supported Binding Mode,
  *        Time,
  *
- *        ...are managed entirely by the mbed cloud client and
- *        cannot be modified through this interface.
- *
+ * ...are managed entirely by the mbed cloud client and cannot be
+ * modified through this interface.
  */
 class CloudClientDm {
 public:
@@ -119,12 +118,14 @@ public:
      */
     ~CloudClientDm();
 
-    /** Start the mbed cloud client with all the
-     * objects that have been set/added so far.
+    /** Start the mbed cloud client with Device object
+     * plus any additional objects.
      *
-     * @return true if successful, otherwise false.
+     * @param objectList list of additional objects to add (may
+     *                   be NULL).
+     * @return           true if successful, otherwise false.
      */
-    bool start();
+    bool start(M2MObjectList *objectList);
 
     /** Stop the mbed cloud client and its objects, deregistering from the
      * server if required.
@@ -140,7 +141,7 @@ public:
 
     /** Keep a UDP link cooking.
      */
-    void keep_alive();
+    void keepAlive();
 
     /** Set the value of the Device object Device Type resource.
      * The value of this static resource is stored in Cloud Client
@@ -470,7 +471,7 @@ protected:
      */
     Callback<void(int)> _errorUserCallback;
 
-    /** Set to true to have debug prints
+    /** Set to true to have debug prints.
      */
     bool               _debugOn;
 
@@ -479,11 +480,7 @@ protected:
      */
     bool               _started;
 
-    /** The LWM2M objects.
-     */
-    M2MObjectList      _objList;
-
-    /** An instance of the mbed Cloud Client
+    /** An instance of the mbed Cloud Client.
      */
     MbedCloudClient    _cloudClient;
 
