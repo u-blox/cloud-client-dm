@@ -471,6 +471,7 @@ CloudClientDm::~CloudClientDm()
 // Add an M2M object that you have created to the client.
 void CloudClientDm::addObject(M2MObject *object)
 {
+    printfLog("Adding object: \"%s\"...\n", object->name());
     _objectList.push_back(object);
 }
 
@@ -478,6 +479,7 @@ void CloudClientDm::addObject(M2MObject *object)
 bool CloudClientDm::start( MbedCloudClientCallback *updateCallback)
 {
     _started = true;
+    _cloudClient.add_objects(_objectList);
     _cloudClient.on_registered(this, &CloudClientDm::clientRegisteredCallback);
     _cloudClient.on_unregistered(this, &CloudClientDm::clientDeregisteredCallback);
     _cloudClient.on_error(this, &CloudClientDm::errorCallback);
