@@ -468,13 +468,16 @@ CloudClientDm::~CloudClientDm()
 {
 }
 
+// Add an M2M object that you have created to the client.
+void CloudClientDm::addObject(M2MObject *object)
+{
+    _objectList.push_back(object);
+}
+
 // Initialise LWM2M and its objects.
-bool CloudClientDm::start(M2MObjectList *objectList, MbedCloudClientCallback *updateCallback)
+bool CloudClientDm::start( MbedCloudClientCallback *updateCallback)
 {
     _started = true;
-    if (objectList != NULL) {
-        _cloudClient.add_objects(*objectList);
-    }
     _cloudClient.on_registered(this, &CloudClientDm::clientRegisteredCallback);
     _cloudClient.on_unregistered(this, &CloudClientDm::clientDeregisteredCallback);
     _cloudClient.on_error(this, &CloudClientDm::errorCallback);

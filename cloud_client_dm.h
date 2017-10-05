@@ -118,16 +118,20 @@ public:
      */
     ~CloudClientDm();
 
+    /** Add an M2M object that you have created to the client.
+     *
+     * @param object  a pointer to the object.
+     */
+    void addObject(M2MObject *object);
+
     /** Start the mbed cloud client with Device object
      * plus any additional objects.
      *
-     * @param objectList     list of additional objects to add (may
-     *                       be NULL).
      * @param updateCallback callback should any resource be written-to
      *                       by the server.
      * @return               true if successful, otherwise false.
      */
-    bool start(M2MObjectList *objectList, MbedCloudClientCallback *updateCallback = NULL);
+    bool start(MbedCloudClientCallback *updateCallback = NULL);
 
     /** Stop the mbed cloud client and its objects, deregistering from the
      * server if required.
@@ -481,6 +485,10 @@ protected:
      * never set back to false again.
      */
     bool               _started;
+
+    /** The list of LWM2M objects.
+     */
+    M2MObjectList      _objectList;
 
     /** An instance of the mbed Cloud Client.
      */
