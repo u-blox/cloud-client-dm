@@ -27,4 +27,4 @@ Note: the following DM object resources:
 * Supported Binding Mode,
 * Time,
 
-..are managed entirely by the mbed cloud client and cannot be modified through this interface.
+...are managed entirely by the mbed cloud client and cannot be modified through this interface.

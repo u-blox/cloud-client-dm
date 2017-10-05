@@ -469,7 +469,7 @@ CloudClientDm::~CloudClientDm()
 }
 
 // Initialise LWM2M and its objects.
-bool CloudClientDm::start(M2MObjectList *objectList)
+bool CloudClientDm::start(M2MObjectList *objectList, MbedCloudClientCallback *updateCallback)
 {
     _started = true;
     if (objectList != NULL) {
@@ -478,9 +478,9 @@ bool CloudClientDm::start(M2MObjectList *objectList)
     _cloudClient.on_registered(this, &CloudClientDm::clientRegisteredCallback);
     _cloudClient.on_unregistered(this, &CloudClientDm::clientDeregisteredCallback);
     _cloudClient.on_error(this, &CloudClientDm::errorCallback);
-
-    // TODO
-    //_cloudClient.set_update_callback(&_writable_resource);
+    if (updateCallback != NULL) {
+        _cloudClient.set_update_callback(updateCallback);
+    }
 
     return true;
 }

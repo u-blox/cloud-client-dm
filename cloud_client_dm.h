@@ -121,11 +121,13 @@ public:
     /** Start the mbed cloud client with Device object
      * plus any additional objects.
      *
-     * @param objectList list of additional objects to add (may
-     *                   be NULL).
-     * @return           true if successful, otherwise false.
+     * @param objectList     list of additional objects to add (may
+     *                       be NULL).
+     * @param updateCallback callback should any resource be written-to
+     *                       by the server.
+     * @return               true if successful, otherwise false.
      */
-    bool start(M2MObjectList *objectList);
+    bool start(M2MObjectList *objectList, MbedCloudClientCallback *updateCallback = NULL);
 
     /** Stop the mbed cloud client and its objects, deregistering from the
      * server if required.
@@ -273,7 +275,7 @@ public:
      *
      * @param utcOffsetISO8601 the UTC offset, in the form "UTC+X"
      *                         [ISO 8601].
-     * @return          true if successful, otherwise false.
+     * @return                 true if successful, otherwise false.
      */
     bool setDeviceObjectUtcOffset(const char *utcOffsetISO8601);
 
