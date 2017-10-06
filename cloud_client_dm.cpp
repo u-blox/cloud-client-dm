@@ -63,6 +63,7 @@ void CloudClientDm::clientRegisteredCallback()
 {
     static const ConnectorClientEndpointInfo* endpoint;
 
+    _registered = true;
     printfLog("Client registered.\n");
 
     endpoint = _cloudClient.endpoint_info();
@@ -83,6 +84,7 @@ void CloudClientDm::clientRegisteredCallback()
 // Callback for deregistration event
 void CloudClientDm::clientDeregisteredCallback()
 {
+    _registered = false;
     printfLog("Client deregistered.\n");
 
     if (_deregisteredUserCallback) {
@@ -454,6 +456,7 @@ CloudClientDm::CloudClientDm(bool debugOn,
 {
     _debugOn = debugOn;
     _started = false;
+    _registered = false;
     _registeredUserCallback = registeredUserCallback;
     _deregisteredUserCallback = deregisteredUserCallback;
     _errorUserCallback = errorUserCallback;
@@ -471,7 +474,7 @@ CloudClientDm::~CloudClientDm()
 // Add an M2M object that you have created to the client.
 void CloudClientDm::addObject(M2MObject *object)
 {
-    printfLog("Adding object: \"%s\"...\n", object->name());
+    printfLog("Adding object: \"%s\" to mbed cloud client's list...\n", object->name());
     _objectList.push_back(object);
 }
 
@@ -494,7 +497,16 @@ bool CloudClientDm::start( MbedCloudClientCallback *updateCallback)
 // deregistering from the server.
 void CloudClientDm::stop()
 {
+    Timer timer;
+
+    // This is an asynchronous operation,
+    // the connection is not closed until
+    // clientDeregisteredCallback() is called
+    timer.start();
     _cloudClient.close();
+    while (_registered && (timer.read_ms() < CLOUD_CLIENT_STOP_TIMEOUT_SECONDS * 1000))  {
+        wait_ms(100);
+    }
 
     // Delete the available power source and associated Device object
     // resources that have been created
@@ -532,6 +544,12 @@ bool CloudClientDm::connect(void *interface)
     }
 
     return success;
+}
+
+// Return true if the cloud client is connected to the server.
+bool CloudClientDm::isConnected()
+{
+    return _registered;
 }
 
 // Keep a UDP link up

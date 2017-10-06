@@ -54,6 +54,10 @@
 class CloudClientDm {
 public:
 
+    /** Guard timeout on closing the connection with the server.
+     */
+#   define CLOUD_CLIENT_STOP_TIMEOUT_SECONDS 10
+
     /** The possible battery status values (according to
      * the OMA LWM2M Device object standard)
      */
@@ -144,6 +148,13 @@ public:
      * @return           true if successful, otherwise false.
      */
     bool connect(void *interface);
+
+    /** Returns true if the client is connected to the server.
+     *
+     * @return  true if the client is connected to the server,
+     *          otherwise false.
+     */
+    bool isConnected();
 
     /** Keep a UDP link cooking.
      */
@@ -485,6 +496,11 @@ protected:
      * never set back to false again.
      */
     bool               _started;
+
+    /** True if the client is registered with the
+     * server, otherwise false.
+     */
+    volatile bool      _registered;
 
     /** The list of LWM2M objects.
      */
