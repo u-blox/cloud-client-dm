@@ -479,15 +479,15 @@ void CloudClientDm::addObject(M2MObject *object)
 }
 
 // Initialise LWM2M and its objects.
-bool CloudClientDm::start( MbedCloudClientCallback *updateCallback)
+bool CloudClientDm::start(MbedCloudClientCallback *globalUpdateCallback)
 {
     _started = true;
     _cloudClient.add_objects(_objectList);
     _cloudClient.on_registered(this, &CloudClientDm::clientRegisteredCallback);
     _cloudClient.on_unregistered(this, &CloudClientDm::clientDeregisteredCallback);
     _cloudClient.on_error(this, &CloudClientDm::errorCallback);
-    if (updateCallback != NULL) {
-        _cloudClient.set_update_callback(updateCallback);
+    if (globalUpdateCallback != NULL) {
+        _cloudClient.set_update_callback(globalUpdateCallback);
     }
 
     return true;

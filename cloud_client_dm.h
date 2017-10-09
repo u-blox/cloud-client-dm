@@ -128,14 +128,22 @@ public:
      */
     void addObject(M2MObject *object);
 
-    /** Start the mbed cloud client with Device object
-     * plus any additional objects.
+    /** Start the mbed cloud client with Device object plus any
+     * additional objects.
      *
-     * @param updateCallback callback should any resource be written-to
-     *                       by the server.
-     * @return               true if successful, otherwise false.
+     * @param globalUpdateCallback callback if a resources is written-to
+     *                             by the server.  This must be provided
+     *                             if a writable resources is included in
+     *                             an object when no setCallback() is
+     *                             provided in that object to allow the
+     *                             local device variables to be set to match.
+     *                             Normally a setCallback() would have
+     *                             been included, this merely offers an
+     *                             error trap should you forget (otherwise
+     *                             the mbed cloud client code will assert).
+     * @return                     true if successful, otherwise false.
      */
-    bool start(MbedCloudClientCallback *updateCallback = NULL);
+    bool start(MbedCloudClientCallback *globalUpdateCallback = NULL);
 
     /** Stop the mbed cloud client and its objects, deregistering from the
      * server if required.
