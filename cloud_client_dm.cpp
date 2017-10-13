@@ -19,6 +19,11 @@
 #include "CloudClientStorage.h"
 #include "cloud_client_dm.h"
 
+#if defined(MBED_CONF_MBED_TRACE_ENABLE) && MBED_CONF_MBED_TRACE_ENABLE
+#include "mbed_trace.h"
+#define TRACE_GROUP "CCDM"
+#endif
+
 #ifdef MBED_CLOUD_CLIENT_SUPPORT_UPDATE
 #include "update_ui_example.h"
 #endif
@@ -474,7 +479,7 @@ CloudClientDm::~CloudClientDm()
 // Add an M2M object that you have created to the client.
 void CloudClientDm::addObject(M2MObject *object)
 {
-    printfLog("Adding object: \"%s\" to mbed cloud client's list...\n", object->name());
+    printfLog("Adding object: \"%s\" to Mbed Cloud Client's list...\n", object->name());
     _objectList.push_back(object);
 }
 
@@ -522,7 +527,7 @@ void CloudClientDm::stop()
     // Everything else will be freed when we are deleted
 }
 
-// Connect the mbed cloud client with the server.
+// Connect the Mbed Cloud Client with the server.
 bool CloudClientDm::connect(void *interface)
 {
     bool success = false;
