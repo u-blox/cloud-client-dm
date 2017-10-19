@@ -586,9 +586,9 @@ bool CloudClientDm::setDeviceObjectStaticHardwareVersion(const char *hardwareVer
 }
 
 // Set the Device object Software Version resource.
-bool CloudClientDm::setDeviceObjectStaticSoftwareVersion(const char *softwareVersion)
+bool CloudClientDm::setDeviceObjectSoftwareVersion(const char *softwareVersion)
 {
-    return setDeviceObjectConfigResource(M2MDevice::SoftwareVersion, softwareVersion);
+    return setDeviceObjectResource(M2MDevice::SoftwareVersion, softwareVersion);
 }
 
 // Set the Device object Firmware Version resource.

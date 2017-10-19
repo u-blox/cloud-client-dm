@@ -196,13 +196,13 @@ public:
     bool setDeviceObjectStaticHardwareVersion(const char *hardwareVersion);
 
     /** Set the value of the Device object Software Version resource.
-     * The value of this static resource is stored in Cloud Client
-     * storage.
+     * The value of this static resource is NOT stored in Cloud Client
+     * storage, just overwritten in RAM.
      *
      * @param softwareVersion the software version as a string.
      * @return                true if successful, otherwise false.
      */
-    bool setDeviceObjectStaticSoftwareVersion(const char *softwareVersion);
+    bool setDeviceObjectSoftwareVersion(const char *softwareVersion);
 
     /** Set the value of the Device object Firmware Version resource.
      * You'da though that the value of this resource would be stored
