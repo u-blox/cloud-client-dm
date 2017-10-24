@@ -619,6 +619,11 @@ bool CloudClientDm::addDeviceObjectPowerSource(PowerSource powerSource)
         success = createDeviceObjectResource(M2MDevice::AvailablePowerSources, (int64_t) powerSource, x) &&
                   createDeviceObjectResource(M2MDevice::PowerSourceVoltage, (int64_t) 0, x) &&
                   createDeviceObjectResource(M2MDevice::PowerSourceCurrent, (int64_t) 0, x);
+        // For internal battery, only, add the status and percentage remaining resources
+        if (success && (powerSource == POWER_SOURCE_INTERNAL_BATTERY)) {
+            success = createDeviceObjectResource(M2MDevice::BatteryLevel, (int64_t) 0) &&
+                      createDeviceObjectResource(M2MDevice::BatteryStatus, (int64_t) 0);
+        }
     }
 
     return success;
@@ -646,6 +651,11 @@ bool CloudClientDm::deleteDeviceObjectPowerSource(PowerSource powerSource)
             deleteDeviceObjectResource(M2MDevice::PowerSourceCurrent, x)) {
             _powerSourceInstance[x] = POWER_SOURCE_UNUSED;
             success = true;
+        }
+        // For internal battery, also delete the status and percentage remaining resources
+        if (success && (powerSource == POWER_SOURCE_INTERNAL_BATTERY)) {
+            success = deleteDeviceObjectResource(M2MDevice::BatteryLevel) &&
+                      deleteDeviceObjectResource(M2MDevice::BatteryStatus);
         }
     }
 
