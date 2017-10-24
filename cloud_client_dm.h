@@ -214,14 +214,22 @@ public:
      */
     bool setDeviceObjectFirmwareVersion(const char *firmwareVersion);
 
-    /** Add an Available Power Source to the Device object resource.
+    /** Add an Available Power Source to the Device object resources.
      *
      * @param powerSource the power source.
      * @return            true if successful, otherwise false.
      */
     bool addDeviceObjectPowerSource(PowerSource powerSource);
 
-    /** Delete an Available Power Source from the Device object resource.
+    /** Check if an Available Power Source resource of a given
+     * type has already been added to the Device object.
+     *
+     * @param powerSource the power source.
+     * @return            true if it exists, otherwise false.
+     */
+    bool existsDeviceObjectPowerSource(PowerSource powerSource);
+
+    /** Delete an Available Power Source from the Device object resources.
      *
      * @param powerSource the power source.
      * @return            true if successful, otherwise false.

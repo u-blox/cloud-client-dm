@@ -629,6 +629,22 @@ bool CloudClientDm::addDeviceObjectPowerSource(PowerSource powerSource)
     return success;
 }
 
+// Check if a Device object Available Power Source resource of a given type
+// already exists
+bool CloudClientDm::existsDeviceObjectPowerSource(PowerSource powerSource)
+{
+    bool foundIt = false;
+
+    // Find the instance ID
+    for (unsigned int x = 0; (x < sizeof(_powerSourceInstance) / sizeof (_powerSourceInstance[0])) && !foundIt; x++) {
+        if (_powerSourceInstance[x] == powerSource) {
+            foundIt = true;
+        }
+    }
+
+    return foundIt;
+}
+
 // Delete a Device object Available Power Source resource.
 bool CloudClientDm::deleteDeviceObjectPowerSource(PowerSource powerSource)
 {
